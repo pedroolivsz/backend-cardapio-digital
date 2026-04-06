@@ -11,7 +11,8 @@ public class FoodMapper {
                 request.description(),
                 category,
                 request.image(),
-                request.price()
+                request.price(),
+                request.stock()
         );
     }
 }

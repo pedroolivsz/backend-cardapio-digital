@@ -26,12 +26,19 @@ public class Food {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String image;
     private BigDecimal price;
+    private Integer stock;
 
-    public Food(String title, String description, Category category, String image, BigDecimal price) {
+    public Food(String title,
+                String description,
+                Category category,
+                String image,
+                BigDecimal price,
+                Integer stock) {
         this.title = title;
         this.description = description;
         this.category = category;
         this.image = image;
         this.price = price;
+        this.stock = stock;
     }
 }

@@ -9,8 +9,15 @@ public record FoodResponse(Long id,
                            String description,
                            Long categoryId,
                            String image,
-                           BigDecimal price) {
+                           BigDecimal price,
+                           Integer stock) {
     public FoodResponse(Food food) {
-        this(food.getId(), food.getTitle(), food.getDescription(), food.getCategory().getId(), food.getImage(), food.getPrice());
+        this(food.getId(),
+                food.getTitle(),
+                food.getDescription(),
+                food.getCategory().getId(),
+                food.getImage(),
+                food.getPrice(),
+                food.getStock());
     }
 }

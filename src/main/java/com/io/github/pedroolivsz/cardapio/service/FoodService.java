@@ -46,6 +46,7 @@ public class FoodService {
         food.setImage(foodRequest.image());
         food.setDescription(foodRequest.description());
         food.setPrice(foodRequest.price());
+        food.setStock(foodRequest.stock());
 
         foodRepository.save(food);
     }
