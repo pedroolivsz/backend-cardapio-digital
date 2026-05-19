@@ -1,6 +1,6 @@
 package com.io.github.pedroolivsz.cardapio.controller;
 
-import com.io.github.pedroolivsz.cardapio.DTO.CategoryMenuDTO;
+import com.io.github.pedroolivsz.cardapio.DTO.category.CategoryMenuDTO;
 import com.io.github.pedroolivsz.cardapio.service.MenuService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/menu")
-@CrossOrigin(origins = "http://localhost:5173", allowedHeaders = "*")
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:3000"}, allowedHeaders = "*")
 public class MenuController {
     private final MenuService menuService;
 

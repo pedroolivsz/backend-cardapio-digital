@@ -1,7 +1,7 @@
 package com.io.github.pedroolivsz.cardapio.service;
 
-import com.io.github.pedroolivsz.cardapio.DTO.CategoryMenuDTO;
-import com.io.github.pedroolivsz.cardapio.DTO.FoodMenuDTO;
+import com.io.github.pedroolivsz.cardapio.DTO.category.CategoryMenuDTO;
+import com.io.github.pedroolivsz.cardapio.DTO.food.FoodMenuDTO;
 import com.io.github.pedroolivsz.cardapio.entity.Category;
 import com.io.github.pedroolivsz.cardapio.repository.CategoryRepository;
 import org.springframework.stereotype.Service;

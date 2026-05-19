@@ -1,7 +1,7 @@
 package com.io.github.pedroolivsz.cardapio.controller;
 
-import com.io.github.pedroolivsz.cardapio.DTO.FoodRequest;
-import com.io.github.pedroolivsz.cardapio.DTO.FoodResponse;
+import com.io.github.pedroolivsz.cardapio.DTO.food.FoodRequest;
+import com.io.github.pedroolivsz.cardapio.DTO.food.FoodResponse;
 import com.io.github.pedroolivsz.cardapio.service.FoodService;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/food")
-@CrossOrigin(origins = "http://localhost:5173", allowedHeaders = "*")
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:3000"}, allowedHeaders = "*")
 public class FoodController {
     private final FoodService service;
 

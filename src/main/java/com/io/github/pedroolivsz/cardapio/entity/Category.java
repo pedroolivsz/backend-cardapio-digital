@@ -1,6 +1,5 @@
 package com.io.github.pedroolivsz.cardapio.entity;
 
-import com.io.github.pedroolivsz.cardapio.DTO.CategoryRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

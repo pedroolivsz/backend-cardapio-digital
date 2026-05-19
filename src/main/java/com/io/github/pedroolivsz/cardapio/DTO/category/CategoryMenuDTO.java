@@ -1,4 +1,6 @@
-package com.io.github.pedroolivsz.cardapio.DTO;
+package com.io.github.pedroolivsz.cardapio.DTO.category;
+
+import com.io.github.pedroolivsz.cardapio.DTO.food.FoodMenuDTO;
 
 import java.util.List;
 

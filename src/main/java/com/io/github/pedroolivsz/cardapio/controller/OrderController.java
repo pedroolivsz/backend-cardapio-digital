@@ -1,7 +1,7 @@
 package com.io.github.pedroolivsz.cardapio.controller;
 
-import com.io.github.pedroolivsz.cardapio.DTO.OrderRequest;
-import com.io.github.pedroolivsz.cardapio.DTO.OrderResponse;
+import com.io.github.pedroolivsz.cardapio.DTO.order.OrderRequest;
+import com.io.github.pedroolivsz.cardapio.DTO.order.OrderResponse;
 import com.io.github.pedroolivsz.cardapio.entity.enums.OrderStatus;
 import com.io.github.pedroolivsz.cardapio.service.OrderService;
 import jakarta.validation.Valid;
@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/orders")
-@CrossOrigin(origins = "http://localhost:5173", allowedHeaders = "*")
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:3000"}, allowedHeaders = "*")
 public class OrderController {
     private final OrderService orderService;
 

@@ -1,7 +1,7 @@
 package com.io.github.pedroolivsz.cardapio.service;
 
-import com.io.github.pedroolivsz.cardapio.DTO.OrderRequest;
-import com.io.github.pedroolivsz.cardapio.DTO.OrderResponse;
+import com.io.github.pedroolivsz.cardapio.DTO.order.OrderRequest;
+import com.io.github.pedroolivsz.cardapio.DTO.order.OrderResponse;
 import com.io.github.pedroolivsz.cardapio.entity.Food;
 import com.io.github.pedroolivsz.cardapio.entity.Order;
 import com.io.github.pedroolivsz.cardapio.entity.OrderItem;
@@ -25,13 +25,16 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final FoodRepository foodRepository;
     private final SimpMessagingTemplate messagingTemplate;
+    private final EvolutionApiService evolutionApiService;
 
     public OrderService(OrderRepository orderRepository,
                         FoodRepository foodRepository,
-                        SimpMessagingTemplate messagingTemplate) {
+                        SimpMessagingTemplate messagingTemplate,
+                        EvolutionApiService evolutionApiService) {
         this.orderRepository = orderRepository;
         this.foodRepository = foodRepository;
         this.messagingTemplate = messagingTemplate;
+        this.evolutionApiService = evolutionApiService;
     }
 
     @Transactional
@@ -106,6 +109,11 @@ public class OrderService {
         orderRepository.save(order);
 
         messagingTemplate.convertAndSend("/topic/orders", new OrderResponse(order));
+
+        OrderResponse orderResponse = new OrderResponse(order);
+
+        evolutionApiService.notifyEstablishment(orderResponse);
+        evolutionApiService.notifyClient(orderResponse);
     }
 
     public List<OrderResponse> listAllOrders() {

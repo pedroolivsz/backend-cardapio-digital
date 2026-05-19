@@ -1,4 +1,4 @@
-package com.io.github.pedroolivsz.cardapio.DTO;
+package com.io.github.pedroolivsz.cardapio.DTO.food;
 
 import java.math.BigDecimal;
 

@@ -1,7 +1,7 @@
 package com.io.github.pedroolivsz.cardapio.service;
 
-import com.io.github.pedroolivsz.cardapio.DTO.CategoryRequest;
-import com.io.github.pedroolivsz.cardapio.DTO.CategoryResponse;
+import com.io.github.pedroolivsz.cardapio.DTO.category.CategoryRequest;
+import com.io.github.pedroolivsz.cardapio.DTO.category.CategoryResponse;
 import com.io.github.pedroolivsz.cardapio.exceptions.BusinessException;
 import com.io.github.pedroolivsz.cardapio.mapper.CategoryMapper;
 import com.io.github.pedroolivsz.cardapio.repository.CategoryRepository;

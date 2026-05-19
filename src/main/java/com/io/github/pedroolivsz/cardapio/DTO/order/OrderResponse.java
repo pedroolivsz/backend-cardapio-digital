@@ -1,7 +1,6 @@
-package com.io.github.pedroolivsz.cardapio.DTO;
+package com.io.github.pedroolivsz.cardapio.DTO.order;
 
 import com.io.github.pedroolivsz.cardapio.entity.Order;
-import com.io.github.pedroolivsz.cardapio.entity.OrderItem;
 
 import java.math.BigDecimal;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.io.github.pedroolivsz.cardapio.DTO;
+package com.io.github.pedroolivsz.cardapio.DTO.order;
 
 import com.io.github.pedroolivsz.cardapio.entity.enums.PaymentMethod;
 import jakarta.validation.constraints.NotBlank;
