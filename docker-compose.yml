@@ -1,0 +1,48 @@
+services:
+  backend:
+    build: .
+    container_name: cardapio-backend
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/food
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME:-admin}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-admin}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      EVOLUTION_API_URL: ${EVOLUTION_API_URL:-http://localhost:8081}
+      EVOLUTION_API_KEY: ${EVOLUTION_API_KEY}
+      EVOLUTION_API_INSTANCE: ${EVOLUTION_API_INSTANCE}
+      EVOLUTION_ESTABLISHMENT_PHONE: ${EVOLUTION_ESTABLISHMENT_PHONE}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - cardapio-net
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: cardapio-postgres
+    environment:
+      POSTGRES_DB: food
+      POSTGRES_USER: ${DB_USERNAME:-admin}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-admin}
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-admin} -d food"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - cardapio-net
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  cardapio-net:
+    driver: bridge
