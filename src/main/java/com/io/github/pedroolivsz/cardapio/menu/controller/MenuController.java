@@ -1,4 +1,4 @@
-package com.io.github.pedroolivsz.cardapio.controller;
+package com.io.github.pedroolivsz.cardapio.menu.controller;
 
 import com.io.github.pedroolivsz.cardapio.category.dto.CategoryMenuDTO;
 import com.io.github.pedroolivsz.cardapio.menu.service.MenuService;
