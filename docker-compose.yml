@@ -1,4 +1,20 @@
 services:
+  evolution-api:
+    container_name: evolution-api
+    image: evoapicloud/evolution-api:v2.1.1
+    restart: always
+    ports:
+      - "8081:8080"
+    env_file:
+      - .env
+    volumes:
+      - evolution_instances:/evolution/instances
+    depends_on:
+      postgres:
+          condition: service_healthy
+    networks:
+      - cardapio-net
+
   backend:
     build: .
     container_name: cardapio-backend
@@ -9,7 +25,7 @@ services:
       SPRING_DATASOURCE_USERNAME: ${DB_USERNAME:-admin}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-admin}
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
-      EVOLUTION_API_URL: ${EVOLUTION_API_URL:-http://localhost:8081}
+      EVOLUTION_API_URL: ${EVOLUTION_API_URL:-http://evolution-api:8080}
       EVOLUTION_API_KEY: ${EVOLUTION_API_KEY}
       EVOLUTION_API_INSTANCE: ${EVOLUTION_API_INSTANCE}
       EVOLUTION_ESTABLISHMENT_PHONE: ${EVOLUTION_ESTABLISHMENT_PHONE}
@@ -40,8 +56,20 @@ services:
       - cardapio-net
     restart: unless-stopped
 
+  redis:
+    image: redis:7-alpine
+    container_name: cardapio-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    networks:
+      - cardapio-net
+
 volumes:
   postgres_data:
+  evolution_instances:
+  redis_data:
 
 networks:
   cardapio-net:
