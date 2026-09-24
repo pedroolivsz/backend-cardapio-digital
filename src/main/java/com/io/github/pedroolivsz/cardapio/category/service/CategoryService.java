@@ -1,7 +1,7 @@
 package com.io.github.pedroolivsz.cardapio.category.service;
 
-import com.io.github.pedroolivsz.cardapio.category.dto.CategoryRequestDTO;
-import com.io.github.pedroolivsz.cardapio.category.dto.CategoryResponseDTO;
+import com.io.github.pedroolivsz.cardapio.category.dto.CategoryRequest;
+import com.io.github.pedroolivsz.cardapio.category.dto.CategoryResponse;
 import com.io.github.pedroolivsz.cardapio.exceptions.BusinessException;
 import com.io.github.pedroolivsz.cardapio.category.mapper.CategoryMapper;
 import com.io.github.pedroolivsz.cardapio.category.repository.CategoryRepository;
@@ -17,15 +17,21 @@ public class CategoryService {
         this.repository = repository;
     }
 
-    public void save(CategoryRequestDTO categoryRequestDTO) {
-        validateSaveRulesBusiness(categoryRequestDTO);
-        repository.save(CategoryMapper.toEntity(categoryRequestDTO));
+    /**
+     * Cadastra uma nova categoria após validar
+     * as regras de negócio.
+     *
+     * @param categoryRequest dados da categoria
+     */
+    public void save(CategoryRequest categoryRequest) {
+        validateSaveRulesBusiness(categoryRequest);
+        repository.save(CategoryMapper.toEntity(categoryRequest));
     }
 
-    public List<CategoryResponseDTO> getAll() {
+    public List<CategoryResponse> getAll() {
         return repository.findAll()
                 .stream()
-                .map(CategoryResponseDTO::new)
+                .map(CategoryResponse::new)
                 .toList();
     }
 
@@ -34,8 +40,8 @@ public class CategoryService {
         repository.deleteById(id);
     }
 
-    private void validateSaveRulesBusiness(CategoryRequestDTO categoryRequestDTO) {
-        if(repository.existsByName(categoryRequestDTO.name())) {
+    private void validateSaveRulesBusiness(CategoryRequest categoryRequest) {
+        if(repository.existsByName(categoryRequest.name())) {
             throw new BusinessException("Category already exists this name.");
         }
     }
