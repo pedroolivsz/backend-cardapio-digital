@@ -1,7 +1,7 @@
 package com.io.github.pedroolivsz.cardapio.food.service;
 
-import com.io.github.pedroolivsz.cardapio.food.dto.FoodRequestDTO;
-import com.io.github.pedroolivsz.cardapio.food.dto.FoodResponseDTO;
+import com.io.github.pedroolivsz.cardapio.food.dto.FoodRequest;
+import com.io.github.pedroolivsz.cardapio.food.dto.FoodResponse;
 import com.io.github.pedroolivsz.cardapio.category.entity.Category;
 import com.io.github.pedroolivsz.cardapio.food.entity.Food;
 import com.io.github.pedroolivsz.cardapio.exceptions.BusinessException;
@@ -24,29 +24,35 @@ public class FoodService {
         this.categoryRepository = categoryRepository;
     }
 
-    public void save(FoodRequestDTO foodRequestDTO) {
-        validateSaveBusinessRules(foodRequestDTO);
+    /**
+     * Cadastra um novo alimento após validar
+     * as regras de negócio.
+     *
+     * @param foodRequest dados do alimento
+     */
+    public void save(FoodRequest foodRequest) {
+        validateSaveBusinessRules(foodRequest);
 
         Category category = categoryRepository
-                .findById(foodRequestDTO.categoryId())
+                .findById(foodRequest.categoryId())
                 .orElseThrow();
 
-        Food food = FoodMapper.toEntity(foodRequestDTO, category);
+        Food food = FoodMapper.toEntity(foodRequest, category);
         foodRepository.save(food);
     }
 
     @Transactional
-    public void update(Long id, FoodRequestDTO foodRequestDTO) {
+    public void update(Long id, FoodRequest foodRequest) {
         Food food = foodRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Food not found."));
 
-        validateUpdateBusinessRules(id, foodRequestDTO);
+        validateUpdateBusinessRules(id, foodRequest);
 
-        food.setTitle(foodRequestDTO.title());
-        food.setImage(foodRequestDTO.image());
-        food.setDescription(foodRequestDTO.description());
-        food.setPrice(foodRequestDTO.price());
-        food.setStock(foodRequestDTO.stock());
+        food.setTitle(foodRequest.title());
+        food.setImage(foodRequest.image());
+        food.setDescription(foodRequest.description());
+        food.setPrice(foodRequest.price());
+        food.setStock(foodRequest.stock());
 
         foodRepository.save(food);
     }
@@ -57,14 +63,14 @@ public class FoodService {
         foodRepository.deleteById(id);
     }
 
-    public List<FoodResponseDTO> getAll() {
+    public List<FoodResponse> getAll() {
         return foodRepository.findAll()
                 .stream()
-                .map(FoodResponseDTO::new)
+                .map(FoodResponse::new)
                 .toList();
     }
 
-    private void validateSaveBusinessRules(FoodRequestDTO dto) {
+    private void validateSaveBusinessRules(FoodRequest dto) {
         if(foodRepository.existsByTitle(dto.title())) {
             throw new BusinessException("Food already exists with is title.");
         }
@@ -76,7 +82,7 @@ public class FoodService {
         }
     }
 
-    private void validateUpdateBusinessRules(Long id, FoodRequestDTO dto) {
+    private void validateUpdateBusinessRules(Long id, FoodRequest dto) {
         boolean existsWithSameTitle =
                 foodRepository.existsByTitleAndIdNot(dto.title(), id);
 
