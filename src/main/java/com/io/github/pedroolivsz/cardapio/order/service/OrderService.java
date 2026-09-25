@@ -4,6 +4,7 @@ import com.io.github.pedroolivsz.cardapio.event.OrderCreatedEvent;
 import com.io.github.pedroolivsz.cardapio.event.OrderEventListener;
 import com.io.github.pedroolivsz.cardapio.exceptions.BusinessException;
 import com.io.github.pedroolivsz.cardapio.exceptions.FoodNotFoundException;
+import com.io.github.pedroolivsz.cardapio.exceptions.OrderNotFoundException;
 import com.io.github.pedroolivsz.cardapio.order.dto.OrderRequest;
 import com.io.github.pedroolivsz.cardapio.order.dto.OrderResponse;
 import com.io.github.pedroolivsz.cardapio.food.entity.Food;
@@ -119,9 +120,10 @@ public class OrderService {
                 .map(OrderResponse::new);
     }
 
+    @Transactional(readOnly = true)
     public OrderResponse findById(Long id) {
         Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Not found order."));
+                .orElseThrow(() -> new OrderNotFoundException(id));
 
         return new OrderResponse(order);
     }
