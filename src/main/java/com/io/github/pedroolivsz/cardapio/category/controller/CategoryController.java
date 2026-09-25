@@ -4,9 +4,13 @@ import com.io.github.pedroolivsz.cardapio.category.dto.CategoryRequest;
 import com.io.github.pedroolivsz.cardapio.category.dto.CategoryResponse;
 import com.io.github.pedroolivsz.cardapio.category.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +25,7 @@ import java.util.List;
         allowedHeaders = "*"
 )
 @Tag(
-        name = "Category",
+        name = "Categories",
         description = "Operações relacionadas as categorias"
 )
 public class CategoryController {
@@ -37,7 +41,7 @@ public class CategoryController {
     )
     @ApiResponses({
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = "201",
                     description = "Categoria cadastrada com sucesso"
             ),
             @ApiResponse(
@@ -46,8 +50,13 @@ public class CategoryController {
             )
     })
     @PostMapping
-    public void save(@RequestBody CategoryRequest request) {
-        service.save(request);
+    @ResponseStatus(HttpStatus.CREATED)
+    public CategoryResponse save(
+            @RequestBody
+            @Valid
+            CategoryRequest request
+    ) {
+        return service.save(request);
     }
 
     @Operation(
@@ -59,8 +68,36 @@ public class CategoryController {
             description = "Lista de categorias retornada com sucesso"
     )
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public List<CategoryResponse> getAll() {
         return service.getAll();
+    }
+
+    @Operation(
+            summary = "Buscar categoria por id",
+            description = "Retorna categoria pelo id"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Retorna categoria com sucesso."
+    )
+    @ApiResponse(
+            responseCode = "404",
+            description = "Categoria não encontrada"
+    )
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public CategoryResponse getById(
+            @Parameter(
+                    description = "Identificador da categoria",
+                    example = "1",
+                    required = true,
+                    in = ParameterIn.PATH
+            )
+            @PathVariable
+            Long id
+    ) {
+        return service.getById(id);
     }
 
     @Operation(
@@ -69,7 +106,7 @@ public class CategoryController {
     )
     @ApiResponses({
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = "204",
                     description = "Categoria excluída com sucesso"
             ),
             @ApiResponse(
@@ -78,7 +115,17 @@ public class CategoryController {
             )
     })
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(
+            @Parameter(
+                    description = "Identificador da categoria",
+                    example = "1",
+                    required = true,
+                    in = ParameterIn.PATH
+            )
+            @PathVariable
+            Long id
+    ) {
         service.delete(id);
     }
 }
