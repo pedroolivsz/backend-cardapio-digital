@@ -5,9 +5,9 @@ import com.io.github.pedroolivsz.cardapio.food.dto.FoodResponseMenu;
 import com.io.github.pedroolivsz.cardapio.category.entity.Category;
 import com.io.github.pedroolivsz.cardapio.category.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class MenuService {
@@ -17,6 +17,12 @@ public class MenuService {
         this.categoryRepository = categoryRepository;
     }
 
+    /**
+     * Retorna o cardápio completo, agrupando os alimentos por categoria.
+     *
+     * @return lista de categorias com seus respectivos alimentos
+     */
+    @Transactional(readOnly = true)
     public List<CategoryMenu> getMenu() {
         List<Category> categories = categoryRepository.findAllWithFoods();
 
@@ -32,8 +38,8 @@ public class MenuService {
                                         food.getImage(),
                                         food.getPrice()
                                 ))
-                                .collect(Collectors.toList())
+                                .toList()
                 ))
-                .collect(Collectors.toList());
+                .toList();
     }
 }
