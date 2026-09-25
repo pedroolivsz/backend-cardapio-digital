@@ -107,6 +107,12 @@ public class OrderService {
         return response;
     }
 
+    /**
+     * Retorna os pedidos cadastrados, paginados.
+     *
+     * @param pageable parâmetros de paginação e ordenação
+     * @return página com os dados dos pedidos
+     */
     @Transactional(readOnly = true)
     public Page<OrderResponse> listAll(Pageable pageable) {
         return orderRepository.findAll(pageable)
