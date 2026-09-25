@@ -15,6 +15,8 @@ import com.io.github.pedroolivsz.cardapio.order.enums.PaymentMethod;
 import com.io.github.pedroolivsz.cardapio.exceptions.ResourceNotFoundException;
 import com.io.github.pedroolivsz.cardapio.food.repository.FoodRepository;
 import com.io.github.pedroolivsz.cardapio.order.repository.OrderRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -105,11 +107,10 @@ public class OrderService {
         return response;
     }
 
-        public List<OrderResponse> listAll() {
-        return orderRepository.findAll()
-                .stream()
-                .map(OrderResponse::new)
-                .toList();
+    @Transactional(readOnly = true)
+    public Page<OrderResponse> listAll(Pageable pageable) {
+        return orderRepository.findAll(pageable)
+                .map(OrderResponse::new);
     }
 
     public OrderResponse findById(Long id) {

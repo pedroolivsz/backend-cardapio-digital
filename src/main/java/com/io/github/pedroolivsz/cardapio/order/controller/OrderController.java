@@ -10,11 +10,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/v1/orders")
@@ -74,7 +76,7 @@ public class OrderController {
 
     @Operation(
             summary = "Listar pedidos",
-            description = "Retorna todos os pedidos cadastrados"
+            description = "Retorna os pedidos cadastrados, paginados"
     )
     @ApiResponse(
             responseCode = "200",
@@ -82,8 +84,8 @@ public class OrderController {
     )
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<OrderResponse> listAll() {
-        return service.listAll();
+    public Page<OrderResponse> listAll(@PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        return service.listAll(pageable);
     }
 
     @Operation(
