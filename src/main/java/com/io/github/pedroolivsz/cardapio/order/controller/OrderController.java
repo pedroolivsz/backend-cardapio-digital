@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,10 +30,10 @@ import java.util.List;
         description = "Operações relacionadas aos pedidos"
 )
 public class OrderController {
-    private final OrderService orderService;
+    private final OrderService service;
 
-    public OrderController(OrderService orderService) {
-        this.orderService = orderService;
+    public OrderController(OrderService service) {
+        this.service = service;
     }
 
     @Operation(
@@ -62,8 +63,13 @@ public class OrderController {
             )
     })
     @PostMapping
-    public void createOrder(@RequestBody @Valid OrderRequest orderRequest) {
-        orderService.createOrder(orderRequest);
+    @ResponseStatus(HttpStatus.CREATED)
+    public OrderResponse create(
+            @RequestBody
+            @Valid
+            OrderRequest orderRequest
+    ) {
+        return service.create(orderRequest);
     }
 
     @Operation(
@@ -75,8 +81,35 @@ public class OrderController {
             description = "Pedidos retornados com sucesso"
     )
     @GetMapping
-    public List<OrderResponse> listAllOrders() {
-        return orderService.listAllOrders();
+    @ResponseStatus(HttpStatus.OK)
+    public List<OrderResponse> listAll() {
+        return service.listAll();
+    }
+
+    @Operation(
+            summary = "Busca pedido pelo id",
+            description = "Retorna o pedido correspondente"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Pedido retornado com sucesso"
+    )
+    @ApiResponse(
+            responseCode = "404",
+            description = "Pedido não encontrado"
+    )
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public OrderResponse findById(
+            @Parameter(
+                    description = "Identificador do pedido",
+                    example = "1",
+                    required = true
+            )
+            @PathVariable
+            Long id
+    ) {
+        return  service.findById(id);
     }
 
     @Operation(
@@ -94,7 +127,8 @@ public class OrderController {
             )
     })
     @DeleteMapping("/{id}")
-    public void deleteOrder(
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(
             @Parameter(
                     description = "Identificador do pedido",
                     example = "1",
@@ -103,7 +137,7 @@ public class OrderController {
             @PathVariable
             Long id
     ) {
-        orderService.deleteOrder(id);
+        service.delete(id);
     }
 
     @Operation(
@@ -125,6 +159,7 @@ public class OrderController {
             )
     })
     @PatchMapping("/{id}/status")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> updateStatus(
             @Parameter(
                     description = "Identificador do pedido",
@@ -139,7 +174,7 @@ public class OrderController {
             )
             @RequestParam OrderStatus status) {
 
-        orderService.updateStatus(id, status);
+        service.updateStatus(id, status);
         return ResponseEntity.noContent().build();
     }
 }
