@@ -1,0 +1,7 @@
+package com.io.github.pedroolivsz.cardapio.exceptions;
+
+public class OrderNotFoundException extends RuntimeException {
+    public OrderNotFoundException(Long id) {
+        super("Order not found with id: " + id);
+    }
+}
