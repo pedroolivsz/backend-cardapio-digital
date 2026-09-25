@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,7 +25,7 @@ import java.util.List;
         allowedHeaders = "*"
 )
 @Tag(
-    name = "Food",
+    name = "Foods",
     description = "Operações relacionadas aos alimentos"
 )
 public class FoodController {
@@ -40,7 +41,7 @@ public class FoodController {
     )
     @ApiResponses({
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = "201",
                     description = "Alimento cadastrado com sucesso"
             ),
             @ApiResponse(
@@ -49,8 +50,13 @@ public class FoodController {
             )
     })
     @PostMapping
-    public void saveFood(@RequestBody FoodRequest foodRequest) {
-        service.save(foodRequest);
+    @ResponseStatus(HttpStatus.CREATED)
+    public FoodResponse save(
+            @RequestBody
+            @Valid
+            FoodRequest request
+    ) {
+        return service.save(request);
     }
 
     @Operation(
@@ -62,8 +68,36 @@ public class FoodController {
             description = "Lista de alimentos retornada com sucesso"
     )
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public List<FoodResponse> getAll() {
         return service.getAll();
+    }
+
+    @Operation(
+            summary = "Buscar alimento por id",
+            description = "Retorna o alimento cadastrado"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Alimento retornado com sucesso"
+    )
+    @ApiResponse(
+            responseCode = "404",
+            description = "Alimento não encontrado"
+    )
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public FoodResponse getById(
+            @Parameter(
+                    description = "Identificador do alimento",
+                    example = "1",
+                    required = true,
+                    in = ParameterIn.PATH
+            )
+            @PathVariable
+            Long id
+    ) {
+        return service.getById(id);
     }
 
     @Operation(
@@ -82,10 +116,15 @@ public class FoodController {
             @ApiResponse(
                     responseCode = "404",
                     description = "Alimento não encontrado"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Categoria não encontrada"
             )
     })
     @PutMapping("/{id}")
-    public void update(
+    @ResponseStatus(HttpStatus.OK)
+    public FoodResponse update(
             @Parameter(
                     description = "Identificador do alimento",
                     example = "1",
@@ -93,8 +132,11 @@ public class FoodController {
                     in = ParameterIn.PATH
             )
             @PathVariable Long id,
-            @RequestBody @Valid FoodRequest foodRequest) {
-        service.update(id, foodRequest);
+            @RequestBody
+            @Valid
+            FoodRequest request
+    ) {
+        return service.update(id, request);
     }
 
     @Operation(
@@ -103,7 +145,7 @@ public class FoodController {
     )
     @ApiResponses({
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = "204",
                     description = "Alimento excluído com sucesso"
             ),
             @ApiResponse(
@@ -112,6 +154,7 @@ public class FoodController {
             )
     })
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(
             @Parameter(
                     description = "Identificador do alimento",
@@ -119,7 +162,9 @@ public class FoodController {
                     required = true,
                     in = ParameterIn.PATH
             )
-            @PathVariable Long id) {
+            @PathVariable
+            Long id
+    ) {
         service.delete(id);
     }
 }
