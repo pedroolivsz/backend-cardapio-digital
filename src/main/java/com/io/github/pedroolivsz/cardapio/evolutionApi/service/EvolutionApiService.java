@@ -14,13 +14,13 @@ import java.util.Map;
 public class EvolutionApiService {
     private final RestTemplate restTemplate;
 
-    @Value("${evolution.api.url}")
+    @Value("${EVOLUTION_API_URL}")
     private String apiUrl;
-    @Value("${evolution.api.key}")
+    @Value("${EVOLUTION_API_KEY}")
     private String apiKey;
-    @Value("${evolution.api.instance}")
+    @Value("${EVOLUTION_API_INSTANCE}")
     private String instance;
-    @Value("${evolution.establishment.phone}")
+    @Value("${EVOLUTION_ESTABLISHMENT_PHONE}")
     private String establishmentPhone;
 
     public EvolutionApiService(RestTemplate restTemplate) {
