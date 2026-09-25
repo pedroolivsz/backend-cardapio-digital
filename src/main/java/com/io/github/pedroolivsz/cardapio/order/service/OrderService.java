@@ -120,6 +120,13 @@ public class OrderService {
                 .map(OrderResponse::new);
     }
 
+    /**
+     * Busca um pedido pelo identificador.
+     *
+     * @param id identificador do pedido
+     * @return dados do pedido encontrado
+     * @throws OrderNotFoundException se o pedido não existir
+     */
     @Transactional(readOnly = true)
     public OrderResponse findById(Long id) {
         Order order = orderRepository.findById(id)
