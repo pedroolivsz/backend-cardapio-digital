@@ -5,10 +5,8 @@ import com.io.github.pedroolivsz.cardapio.menu.service.MenuService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,10 +24,10 @@ import java.util.List;
         description = "Operações relacionadas ao menu"
 )
 public class MenuController {
-    private final MenuService menuService;
+    private final MenuService service;
 
-    public MenuController(MenuService menuService) {
-        this.menuService = menuService;
+    public MenuController(MenuService service) {
+        this.service = service;
     }
 
     @Operation(
@@ -41,7 +39,8 @@ public class MenuController {
             description = "Lista de categorias e alimentos retornada com sucesso"
     )
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public List<CategoryMenu> getMenu() {
-        return menuService.getMenu();
+        return service.getMenu();
     }
 }
