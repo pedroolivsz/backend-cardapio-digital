@@ -109,4 +109,23 @@ public class Order {
         this.createdAt = createdAt;
         this.status = status;
     }
+
+    public Order(String customerName,
+                 String customerPhone,
+                 String address,
+                 String observation,
+                 PaymentMethod paymentMethod,
+                 BigDecimal changeFor,
+                 LocalDateTime createdAt,
+                 OrderStatus status
+    ) {
+        this.customerName = customerName;
+        this.customerPhone = customerPhone;
+        this.address = address;
+        this.observation = observation;
+        this.paymentMethod = paymentMethod;
+        this.changeFor = changeFor;
+        this.createdAt = createdAt;
+        this.status = status;
+    }
 }
